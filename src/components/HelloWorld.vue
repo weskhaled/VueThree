@@ -1,42 +1,80 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <div class="hello"></div>
 </template>
 
 <script>
+require('../libs/Projector')
+require('../libs/SVGRenderer')
+
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   props: {
     msg: String
+  },
+  mounted() {
+    
+			var camera, scene, renderer;
+			init();
+			animate();
+			function init() {
+				camera = new THREE.PerspectiveCamera( 33, window.innerWidth / window.innerHeight, 0.1, 100 );
+				camera.position.z = 10;
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0, 0, 0 );
+				renderer = new THREE.SVGRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+				//
+				var vertices = [];
+				var divisions = 50;
+				for ( var i = 0; i <= divisions; i ++ ) {
+					var v = ( i / divisions ) * ( Math.PI * 2 );
+					var x = Math.sin( v );
+					var z = Math.cos( v );
+					vertices.push( x, 0, z );
+				}
+				var geometry = new THREE.BufferGeometry();
+				geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+				//
+				for ( var i = 1; i <= 3; i ++ ) {
+					var material = new THREE.LineBasicMaterial( {
+						color: Math.random() * 0xffffff,
+						linewidth: 10
+					} );
+					var line = new THREE.Line( geometry, material );
+					line.scale.setScalar( i / 3 );
+					scene.add( line );
+				}
+				var material = new THREE.LineDashedMaterial( {
+					color: 'blue',
+					linewidth: 1,
+					dashSize: 10,
+					gapSize: 10
+				} );
+				var line = new THREE.Line( geometry, material );
+				line.scale.setScalar( 2 );
+				scene.add( line );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+			function animate() {
+				var count = 0;
+				var time = performance.now() / 1000;
+				scene.traverse( function ( child ) {
+					child.rotation.x = count + ( time / 3 );
+					child.rotation.z = count + ( time / 4 );
+					count ++;
+				} );
+				renderer.render( scene, camera );
+				requestAnimationFrame( animate );
+			}
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

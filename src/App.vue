@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <DrawingBoard msg="Welcome to Your Vue.js App"/>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>
 
@@ -12,6 +13,7 @@ export default {
   name: 'app',
   components: {
     DrawingBoard
+    // HelloWorld
   }
 }
 </script>
