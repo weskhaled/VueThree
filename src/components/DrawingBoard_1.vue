@@ -107,15 +107,41 @@ export default {
       this.scene.add(mesh);
     },
     onClick: function(e) {
+      let self = this;
       // Create the final object to add to the scene
-      this.points.push(new THREE.Vector2(this.mouse.x, this.mouse.y));
+      this.points.push(new THREE.Vector2(self.mouse.x, self.mouse.y));
+      var geometry = new THREE.Geometry();
+      geometry.vertices.push(v);
+      var v = new THREE.Vector3(this.mouse.x, this.mouse.y, 0);
       if (this.count == 0) {
         this.points.push(new THREE.Vector2(this.mouse.x, this.mouse.y));
         this.points.push(new THREE.Vector2(this.mouse.x, this.mouse.y));
         this.geometry = new THREE.Geometry().setFromPoints(this.points);
         this.splineObject = new THREE.Line(this.geometry, this.material);
         this.scene.add(this.splineObject);
-      } else this.splineObject.geometry.setDrawRange(0, this.points.length);
+
+        var v = new THREE.Vector3(this.mouse.x, this.mouse.y, 0);
+        geometry.vertices.push(v);
+
+        var line = new MeshLine.MeshLine();
+        line.setGeometry(geometry);
+        line.setGeometry(geometry, function(p) {
+          return 2;
+        }); // makes width 2 * lineWidth
+        var material = new MeshLine.MeshLineMaterial({
+          color: 0x00ff00,
+          lineWidth: 0.01
+        });
+        var mesh = new THREE.Mesh(line.geometry, material); // this syntax could definitely be improved!
+        this.scene.add(mesh);
+      } else {
+        this.splineObject.geometry.setDrawRange(0, this.points.length);
+
+        // var v = new THREE.Vector3(this.mouse.x, this.mouse.y, 0);
+        // geometry.vertices.push(v);
+        // var mesh = new THREE.Mesh(line.geometry, material); // this syntax could definitely be improved!
+        // this.scene.add(mesh);
+      }
     },
     onMouseMove(e) {
       let self = this;
