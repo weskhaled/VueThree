@@ -1,22 +1,16 @@
 <template>
   <div id="app">
-    <!-- <DrawingBoard msg="Welcome to Your Vue.js App"/> -->
-    <DrawingBoard_1 msg="Welcome to Your Vue.js App"/>
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <DrawingBoard msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-// import HelloWorld from "./components/HelloWorld.vue";
-// import DrawingBoard from "./components/DrawingBoard.vue";
-import DrawingBoard_1 from "./components/DrawingBoard_1.vue";
+import DrawingBoard from "./components/DrawingBoard.vue";
 
 export default {
   name: "app",
   components: {
-    // DrawingBoard
-    DrawingBoard_1
-    // HelloWorld
+    DrawingBoard
   }
 };
 </script>
