@@ -21,8 +21,9 @@
     </svg>
     <!-- controls -->
     <form id="newstart">
-      <input name="thickness" v-model="swidth">
-      <button @click="start" :disabled="!closed">Start</button>
+      <label for="thickness">thickness:</label>
+      <input type="number" name="thickness" v-model="swidth">
+      <button @click="start" :disabled="!closed">Add New</button>
     </form>
   </div>
 </template>
@@ -125,5 +126,10 @@ polygon {
 }
 .point:hover {
   cursor: pointer;
+}
+form#newstart {
+  height: 50px;
+  padding: 12px;
+  padding-bottom: 0;
 }
 </style>
