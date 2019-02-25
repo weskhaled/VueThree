@@ -58,6 +58,7 @@ export default {
       this.closed = false;
       this.stats = [];
     },
+    // click event
     onClick(e) {
       if (!this.closed) {
         if (this.stats.length > 2) {
@@ -76,6 +77,7 @@ export default {
         }
       }
     },
+    // start drag and drop
     startMove: function startMove(evt, index) {
       let self = this;
       let touch = evt.type === "touchstart";
